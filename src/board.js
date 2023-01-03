@@ -3,7 +3,8 @@ class Board {
     constructor(
         width, 
         startingPos = {x : 0, y : 0}, 
-        endingPos = {x: 1, y : 0}
+        endingPos = {x: 1, y : 0},
+        obstacleRatio = 0.3
     ) {
         this.start = {x: startingPos.x, y: startingPos.y};
         this.end = {x: endingPos.x, y: endingPos.y};
@@ -25,6 +26,8 @@ class Board {
             }
         }
         //console.table(this.nodes);
+        this.gridLineWidth = .5;
+        this.obstacleRatio = obstacleRatio;
     }
     
     updateNode() {
@@ -44,11 +47,14 @@ class Board {
         if(!this.previewMousePosition) {
             return
         }
-        this.drawNode({x: this.mouseCurrentPosition.x, y: this.mouseCurrentPosition.y, color: '#8e96a3'});
+        this.drawOutline({
+            x: this.mouseCurrentPosition.x, 
+            y: this.mouseCurrentPosition.y, 
+            color: '#645beb'
+        });
     }
     
     drawGrid() {
-        this.gridLineWidth = .5;
         ctx.lineWidth = this.gridLineWidth;
         ctx.strokeStyle = 'white';
         for(let i = 0; i < this.board_width; i++) {
@@ -67,6 +73,16 @@ class Board {
         }
     }
     
+    randomizeObstacles() {
+        for(let i = 0; i < this.board_width; i++) {
+            for(let j = 0; j < this.board_height; j++) {
+                if(this.nodes[i][j].isStart || this.nodes[i][j].isEnd) continue;
+                const randomBoolean = Math.random() < this.obstacleRatio;
+                this.nodes[i][j].isObstacle = randomBoolean; //randomize the obstacle
+            }
+        }
+        //console.table(this.nodes);
+    }    
     //translate mouse position to grid position
     getMouseBoardPosition(mouseCurrentPosition = {x, y}) {
         let translated = { x: 0, y: 0 }
@@ -94,6 +110,24 @@ class Board {
         ctx.beginPath();
         ctx.fillStyle = color;
         ctx.fillRect(startX, startY, nodeWidth, nodeHeight);
+        ctx.closePath();
+    }
+    
+    //draw an outline with the given coords
+    drawOutline({x, y, color}) {
+        ctx.lineWidth = this.gridLineWidth * 5;
+        ctx.strokeStyle = color;
+        const nodeWidth = this.grid_width / this.board_width;
+        const nodeHeight = this.grid_height / this.board_height;
+        const startX = x * this.grid_width / this.board_width;
+        const startY = y * this.grid_height / this.board_height;
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(startX + nodeWidth, startY);
+        ctx.lineTo(startX + nodeWidth, startY + nodeHeight);
+        ctx.lineTo(startX, startY + nodeHeight);
+        ctx.lineTo(startX, startY);
+        ctx.stroke();
         ctx.closePath();
     }
     

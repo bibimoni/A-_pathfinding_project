@@ -6,6 +6,7 @@ let stateBtn = document.getElementById('state-display');
 let changeStartPosBtn = document.getElementById('changeStartPos');
 let changeEndPosBtn = document.getElementById('changeEndPos');
 let addObstaclesBtn = document.getElementById('addObstacles');
+let randomObstaclesBtn = document.getElementById('randomObstacles');
 
 let states = [
     'edit', 'view', 'onChangingStartPos', 'onChangingEndPos', 'onAddingObstacles'
@@ -31,6 +32,7 @@ window.addEventListener('resize', updateOnResizing);
 changeStartPosBtn.addEventListener('click', updateStartPosition);
 changeEndPosBtn.addEventListener('click', updateEndPosition);
 addObstaclesBtn.addEventListener('click', updateObstacles);
+randomObstaclesBtn.addEventListener('click', () => {board.randomizeObstacles();});
 
 function update() {
     window.requestAnimationFrame(update);
@@ -85,19 +87,4 @@ function updateState() {
     }
 }
 
-function freezeSlider() {
-    let slider = document.getElementById('slider-width')
-    slider.disabled = true;
-    slider.style.background = '#cfc7d4';
-    slider.style.setProperty('--thumb-color', '#85827d');
-    slider.style.setProperty('--thumb-cursor', 'default');
-}
-
-function unFreezeSlider() {
-    let slider = document.getElementById('slider-width')
-    slider.disabled = false;
-    slider.style.background = '#2a6592';
-    slider.style.setProperty('--thumb-color', '#f6b408');
-    slider.style.setProperty('--thumb-cursor', 'pointer');
-}
 

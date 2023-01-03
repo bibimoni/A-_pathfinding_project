@@ -92,13 +92,6 @@ function addingObstacles(e) {
 
 ////////////////////////////////////////////////////////////////
 
-function previewPos(e) {
-    let currentMousePosition = getMousePosition(canvas, e);
-    let currentBoardPosition = board.getMouseBoardPosition(currentMousePosition);
-    board.mouseCurrentPosition = currentBoardPosition;
-    document.getElementById('previewPos').innerHTML = `{${currentBoardPosition.x};${currentBoardPosition.y}}`
-}
-
 function changePosition(e) {
     let currentMousePosition = getMousePosition(canvas, e);
     let currentBoardPosition = board.getMouseBoardPosition(currentMousePosition);
@@ -116,10 +109,3 @@ function changePosition(e) {
     }
 }
 
-//get mouse position relative to canvas 
-function getMousePosition(canvas, e) {
-    let rect = canvas.getBoundingClientRect();
-    let x = e.clientX - rect.left - 1; //1 is the border size
-    let y = e.clientY - rect.top - 1; //1 is the border size
-    return { x: x, y: y};
-}
