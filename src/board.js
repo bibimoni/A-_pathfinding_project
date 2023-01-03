@@ -1,5 +1,4 @@
 class Board {
-
     constructor(
         width, 
         startingPos = {x : 0, y : 0}, 
@@ -28,6 +27,15 @@ class Board {
         //console.table(this.nodes);
         this.gridLineWidth = .5;
         this.obstacleRatio = obstacleRatio;
+        //for the algorithm
+        this.openList = [];
+        this.closeList = [];
+        this.gScore = create2DArray({x: this.board_width, y: this.board_height, val : INF});
+        this.fScore = create2DArray({x: this.board_width, y: this.board_height, val : INF});
+    }
+    
+    a_star({start, goal, h}) {
+            
     }
     
     updateNode() {

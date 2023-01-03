@@ -5,6 +5,7 @@ class Node {
         this.isObstacle = isObstacle;
         this.isStart = false;
         this.isEnd = false;
+        this.parentNode = {x, y};
     }
     
     displayNode() {

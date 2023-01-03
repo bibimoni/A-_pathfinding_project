@@ -1,9 +1,11 @@
+const INF = 1e18;
+
 //get mouse position relative to canvas 
 function getMousePosition(canvas, e) {
     let rect = canvas.getBoundingClientRect();
     let x = e.clientX - rect.left - 1; //1 is the border size
     let y = e.clientY - rect.top - 1; //1 is the border size
-    return { x: x, y: y};
+    return { x: x, y: y };
 }
 
 //preview the position as an outline where the cursor is pointing on
@@ -31,3 +33,16 @@ function unFreezeSlider() {
     slider.style.setProperty('--thumb-color', '#f6b408');
     slider.style.setProperty('--thumb-cursor', 'pointer');
 }
+
+//helper function
+function create2DArray({ x, y, val }) {
+    let res = [];
+    for (let i = 0; i < x; i++) {
+        res[i] = [];
+        for (let j = 0; j < y; j++) {
+            res[i][j] = val;
+        }
+    }
+    return res;
+}
+
