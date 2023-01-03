@@ -4,8 +4,12 @@ let slider_value_width = document.getElementById('width');
 let sliderWidth = document.getElementById('slider-width').value;
 let stateBtn = document.getElementById('state-display');
 let changeStartPosBtn = document.getElementById('changeStartPos');
+let changeEndPosBtn = document.getElementById('changeEndPos');
+let addObstaclesBtn = document.getElementById('addObstacles');
 
-let states = ['edit', 'view', 'onChanging'];
+let states = [
+    'edit', 'view', 'onChangingStartPos', 'onChangingEndPos', 'onAddingObstacles'
+];
 
 let currentState = states[0]; //the default state is edit
 let windowWidth = window.innerWidth * .98; 
@@ -19,11 +23,20 @@ let board = new Board(sliderWidth);
 init();
 update();
 
+//switch states on click
+stateBtn.addEventListener('click', updateState);
+//update on window resizing
+window.addEventListener('resize', updateOnResizing);
+//features call
+changeStartPosBtn.addEventListener('click', updateStartPosition);
+changeEndPosBtn.addEventListener('click', updateEndPosition);
+addObstaclesBtn.addEventListener('click', updateObstacles);
+
 function update() {
     window.requestAnimationFrame(update);
     updateValue();
     updateDimensions(); 
-    updateStartingPosStatus();
+    updatePosStatus();
     displayFeatures();
     board.update();
 }
@@ -40,7 +53,6 @@ function updateValue() {
         //create new board upon changing dimensions
         board = new Board(sliderWidth);
     }
-    
     //update the value show above the slider
     slider_value_width.innerHTML = `Width: ${sliderWidth}`;
 }
@@ -52,11 +64,17 @@ function updateDimensions() {
     canvas.height = windowHeight;
 }
 
+function updateOnResizing() {
+    board.grid_width = canvas.width;
+    board.grid_height = canvas.height;
+}
+
 function init() {
     board.drawGrid();
 }
 
 function updateState() {
+    if(currentState !== states[0] || currentState !== states[1]) return;
     if(currentState === states[0]) {
         currentState = states[1];
         stateBtn.innerHTML = 'View';
@@ -83,30 +101,3 @@ function unFreezeSlider() {
     slider.style.setProperty('--thumb-cursor', 'pointer');
 }
 
-function updateStartingPosStatus() {
-    let posElement = document.querySelector('span[name="pos"]');
-    posElement.innerHTML = ` {${board.start.x};${board.start.y}}`;
-}
-
-function displayFeatures() {
-    if(currentState === states[0]) {
-        document.getElementById('edit').style.display = 'flex';
-    }
-    else if(currentState === states[1]) {
-        document.getElementById('edit').style.display = 'none';
-    }
-}
-
-function changeStartPosition() {
-
-}
-
-//switch states on click
-stateBtn.addEventListener('click',updateState);
-//update on window resizing
-window.addEventListener('resize', () => {
-    board.grid_width = canvas.width;
-    board.grid_height = canvas.height;
-});
-
-changeStartPosBtn.addEventListener('click', changeStartPosition)

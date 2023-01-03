@@ -9,6 +9,7 @@
     <script type="text/javascript" src="src/node.js"></script>
     <script type="text/javascript" src="src/board.js"></script>
     <script type="text/javascript" src="index.js" defer></script>
+    <script type="text/javascript" src="src/features.js"></script>
 </head>
 <body>
     <div class="container">
@@ -19,15 +20,22 @@
             <div id="state">
                 <p>Current mode: <p id="state-display">Edit</p> </p>
             </div>
+            <hr size="1" width="90%" margin-left="1rem">
             <div id="features">
                 <div id="edit">
-                    <p id="startPos">Start positions: 
-                        <span name="pos"></span>
+                    <p id="startPos" class="showPosition">Start positions: 
+                        <span name="sPos"></span>
                     </p>
-                    <p id="changeStartPos">click to change start positions</p>
+                    <p id="changeStartPos" class="editPosition">click to change start positions</p>
+                    <p id="endPos" class="showPosition">End positions: 
+                        <span name="ePos"></span>
+                    </p>
+                    <p id="changeEndPos" class="editPosition">click to change end positions</p>
+                    <p id="addObstacles" class="editPosition">click to add obstacles</p>        
                 </div>
-            </div>
-        </div>
+            </div>  
+            </div>   
+        <div id="previewPos"></div>
     </div>
 </body>
 </html>

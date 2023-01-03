@@ -7,6 +7,7 @@ body {
 .container {
     display: flex;
     flex-direction: row;
+    position: relative;
 }
 
 #canvas {
@@ -16,9 +17,12 @@ body {
 }
 
 .adjustment {
+    position:relative;
+    left: 0;
     justify-content: flex-start;
     flex-direction: column;
     display: flex;
+    height: 100%;
 }
 
 .display {
@@ -39,6 +43,14 @@ body {
     flex-direction: column;
 }
 
+#previewPos {
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    margin-top: auto;
+    display: none;
+}
+
 #state-display {
     margin-left: 1ex;
 }
@@ -49,14 +61,14 @@ body {
     cursor: pointer;
 }
 
-#changeStartPos {
+.editPosition {
     text-decoration: underline;
     fontsize: 50%;
     color: #75807a;
     margin-top: 1rem;
 }
 
-#changeStartPos:hover {
+.editPosition:hover {
     text-decoration: underline;
     fontsize: 50%;
     color: #231c24;
@@ -64,13 +76,13 @@ body {
     font-style: italic;
 }
 
-#startPos {
+.showPosition {
     display: flex;
     flex-direction: row;
     margin-bottom: 0;
 }
 
-#startPos span {
+.showPosition span {
     display: inline-block;
     margin-left: 1ex;
     margin-bottom: 0;
