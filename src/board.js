@@ -27,22 +27,349 @@ class Board {
         //console.table(this.nodes);
         this.gridLineWidth = .5;
         this.obstacleRatio = obstacleRatio;
-        //for the algorithm
-        this.openList = [];
-        this.closeList = [];
-        this.gScore = create2DArray({x: this.board_width, y: this.board_height, val : INF});
-        this.fScore = create2DArray({x: this.board_width, y: this.board_height, val : INF});
     }
     
-    a_star({start, goal, h}) {
+    a_star() {
+        //open list stores f (f = g + h) and i, j
+        let openList = new Set();
+        let closeList = create2DArray({x: this.board_width, y: this.board_height, val: false});
+        let foundDest = false;
+
+        let i, j;
+        i = this.start.x; j = this.start.y;
+        this.nodes[this.start.x][this.start.y].fScore = 0;
+        this.nodes[this.start.x][this.start.y].hScore = 0;
+        this.nodes[this.start.x][this.start.y].gScore = 0;
+        this.nodes[this.start.x][this.start.y].parent.x = i;
+        this.nodes[this.start.x][this.start.y].parent.y = j;     
+        
+        //first node has f = 0
+        openList.add([0, [i, j]]); 
+        
+        while(openList.length !== 0) {
+            let current = [...openList][0];
+            openList.delete(current);
             
+            if(!current || !current[1]) {
+                break;
+            }
+            
+            i = current[1][0];
+            j = current[1][1];
+            closeList[i][j] = true;
+            
+            let gNew, hNew, fNew;
+            
+            // x - 1, y //////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            if(this.isValid({x: i - 1, y: j})) {
+                console.log(`x - 1 y`)
+                if(this.isDestination({x: i - 1, y: j})) {
+                    this.nodes[i - 1][j].parent.x = i;
+                    this.nodes[i - 1][j].parent.y = j;
+                    console.log(this.nodes[i - 1][j])
+                    console.log("Found  destination");
+                    this.tracePath();
+                    foundDest = true;
+                    return;
+                }
+                else if(!closeList[i - 1][j] && !this.nodes[i - 1][j].isObstacle) {
+                    gNew = this.nodes[i][j].gScore + 1.0;
+                    hNew = this.calculateHScore({x: i - 1,y: j});
+                    fNew = gNew + hNew;
+                    
+                    if(this.nodes[i - 1][j].fScore === INF 
+                        || this.nodes[i - 1][j].fScore > fNew) {
+                        // console.log([fNew, [i - 1, j]]);
+                        openList.add([fNew, [i - 1, j]]);
+                        
+                        this.nodes[i - 1][j].fScore = fNew;
+                        this.nodes[i - 1][j].gScore = gNew;
+                        this.nodes[i - 1][j].hScore = hNew;
+                        this.nodes[i - 1][j].parent.x = i;
+                        this.nodes[i - 1][j].parent.y = j;
+                        console.log(this.nodes[i - 1][j])
+                    }
+                }
+            }
+            
+            // x + 1, y //////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            if(this.isValid({x: i + 1, y: j})) {
+                console.log(`x + 1 y`)
+                if(this.isDestination({x: i + 1, y: j})) {
+                    this.nodes[i + 1][j].parent.x = i;
+                    this.nodes[i + 1][j].parent.y = j;
+                    console.log(this.nodes[i + 1][j]);
+                    console.log("Found  destination");
+                    this.tracePath();
+                    foundDest = true;
+                    return;
+                }
+                else if(!closeList[i + 1][j] && !this.nodes[i + 1][j].isObstacle) {
+                    gNew = this.nodes[i][j].gScore + 1.0;
+                    hNew = this.calculateHScore({x: i + 1,y: j});
+                    fNew = gNew + hNew;
+                    
+                    if(this.nodes[i + 1][j].fScore === INF 
+                        || this.nodes[i + 1][j].fScore > fNew) {
+                        // console.log([fNew, [i + 1, j]])
+                        openList.add([fNew, [i + 1, j]]);
+                        
+                        this.nodes[i + 1][j].fScore = fNew;
+                        this.nodes[i + 1][j].gScore = gNew;
+                        this.nodes[i + 1][j].hScore = hNew;
+                        this.nodes[i + 1][j].parent.x = i;
+                        this.nodes[i + 1][j].parent.y = j;
+                        console.log(this.nodes[i + 1][j]);
+                    }
+                }
+            }
+            
+            // x, y - 1 //////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            if(this.isValid({x: i, y: j - 1})) {
+                console.log(`x y - 1`)
+                if(this.isDestination({x: i, y: j - 1})) {
+                    this.nodes[i][j - 1].parent.x = i;
+                    this.nodes[i][j - 1].parent.y = j;
+                    console.log(this.nodes[i][j - 1].parent)
+                    console.log("Found  destination");
+                    this.tracePath();
+                    foundDest = true;
+                    return;
+                }
+                else if(!closeList[i][j - 1] && !this.nodes[i][j - 1].isObstacle) {
+                    gNew = this.nodes[i][j].gScore + 1.0;
+                    hNew = this.calculateHScore({x: i, y: j - 1});
+                    fNew = gNew + hNew;
+                    
+                    if(this.nodes[i][j - 1].fScore === INF 
+                        || this.nodes[i][j - 1].fScore > fNew) {
+                        // console.log([fNew, [i, j - 1]])
+                        openList.add([fNew, [i, j - 1]]);
+                        
+                        this.nodes[i][j - 1].fScore = fNew;
+                        this.nodes[i][j - 1].gScore = gNew;
+                        this.nodes[i][j - 1].hScore = hNew;
+                        this.nodes[i][j - 1].parent.x = i;
+                        this.nodes[i][j - 1].parent.y = j;
+                        console.log(this.nodes[i][j - 1].parent)
+                    }
+                }
+            } 
+            
+            // x, y + 1 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            if(this.isValid({x: i, y: j + 1})) {
+                console.log(`x y + 1`)
+                if(this.isDestination({x: i, y: j + 1})) {
+                    this.nodes[i][j + 1].parent.x = i;
+                    this.nodes[i][j + 1].parent.y = j;
+                    console.log(this.nodes[i][j + 1].parent)
+                    console.log("Found  destination");
+                    this.tracePath();
+                    foundDest = true;
+                    return;
+                }
+                else if(!closeList[i][j + 1] && !this.nodes[i][j + 1].isObstacle) {
+                    gNew = this.nodes[i][j].gScore + 1.0;
+                    hNew = this.calculateHScore({x: i, y: j + 1});
+                    fNew = gNew + hNew;
+                    
+                    if(this.nodes[i][j + 1].fScore === INF 
+                        || this.nodes[i][j + 1].fScore > fNew) {
+                        // console.log([fNew, [i, j + 1]])
+                        openList.add([fNew, [i, j + 1]]);
+                        
+                        this.nodes[i][j + 1].fScore = fNew;
+                        this.nodes[i][j + 1].gScore = gNew;
+                        this.nodes[i][j + 1].hScore = hNew;
+                        this.nodes[i][j + 1].parent.x = i;
+                        this.nodes[i][j + 1].parent.y = j;
+                        console.log(this.nodes[i][j + 1].parent)
+                    }
+                }
+            } 
+            
+            // x + 1, y + 1 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            if(this.isValid({x: i + 1, y: j + 1})) {
+            console.log(`x + 1 y + 1`)
+                if(this.isDestination({x: i + 1, y: j + 1})) {
+                    this.nodes[i + 1][j + 1].parent.x = i;
+                    this.nodes[i + 1][j + 1].parent.y = j;
+                    console.log(this.nodes[i + 1][j + 1].parent);
+                    console.log("Found  destination");
+                    this.tracePath();
+                    foundDest = true;
+                    return;
+                }
+                else if(!closeList[i + 1][j + 1] && !this.nodes[i + 1][j + 1].isObstacle) {
+                    gNew = this.nodes[i][j].gScore + 1.0;
+                    hNew = this.calculateHScore({x: i + 1, y: j + 1});
+                    fNew = gNew + hNew;
+                    
+                    if(this.nodes[i + 1][j + 1].fScore === INF 
+                        || this.nodes[i + 1][j + 1].fScore > fNew) {
+                        // console.log([fNew, [i + 1, j + 1]])
+                        openList.add([fNew, [i + 1, j + 1]]);
+                        
+                        this.nodes[i + 1][j + 1].fScore = fNew;
+                        this.nodes[i + 1][j + 1].gScore = gNew;
+                        this.nodes[i + 1][j + 1].hScore = hNew;
+                        this.nodes[i + 1][j + 1].parent.x = i;
+                        this.nodes[i + 1][j + 1].parent.y = j;
+                        console.log(this.nodes[i + 1][j + 1].parent);
+                    }
+                }
+            }
+            
+            // x - 1, y + 1 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            if(this.isValid({x: i - 1, y: j + 1})) {
+            console.log(`x - 1 y + 1`)
+                if(this.isDestination({x: i - 1, y: j + 1})) {
+                    this.nodes[i - 1][j + 1].parent.x = i;
+                    this.nodes[i - 1][j + 1].parent.y = j;
+                    console.log(this.nodes[i - 1][j + 1].parent);
+                    console.log("Found  destination");
+                    this.tracePath();
+                    foundDest = true;
+                    return;
+                }
+                else if(!closeList[i - 1][j + 1] && !this.nodes[i - 1][j + 1].isObstacle) {
+                    gNew = this.nodes[i][j].gScore + 1.0;
+                    hNew = this.calculateHScore({x: i - 1, y: j + 1});
+                    fNew = gNew + hNew;
+                    
+                    if(this.nodes[i - 1][j + 1].fScore === INF 
+                        || this.nodes[i - 1][j + 1].fScore > fNew) {
+                        // console.log([fNew, [i - 1, j + 1]]);
+                        openList.add([fNew, [i - 1, j + 1]]);
+                        
+                        this.nodes[i - 1][j + 1].fScore = fNew;
+                        this.nodes[i - 1][j + 1].gScore = gNew;
+                        this.nodes[i - 1][j + 1].hScore = hNew;
+                        this.nodes[i - 1][j + 1].parent.x = i;
+                        this.nodes[i - 1][j + 1].parent.y = j;
+                        console.log(this.nodes[i - 1][j + 1].parent);
+                    }
+                }
+            }
+            
+            // x - 1, y - 1 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            if(this.isValid({x: i - 1, y: j - 1})) {
+            console.log(`x - 1 y - 1`)
+                if(this.isDestination({x: i - 1, y: j - 1})) {
+                    this.nodes[i - 1][j - 1].parent.x = i;
+                    this.nodes[i - 1][j - 1].parent.y = j;
+                    console.log(this.nodes[i - 1][j - 1].parent);
+                    console.log("Found  destination");
+                    this.tracePath();
+                    foundDest = true;
+                    return;
+                }
+                else if(!closeList[i - 1][j - 1] && !this.nodes[i - 1][j - 1].isObstacle) {
+                    gNew = this.nodes[i][j].gScore + 1.0;
+                    hNew = this.calculateHScore({x: i - 1, y: j - 1});
+                    fNew = gNew + hNew;
+                    
+                    if(this.nodes[i - 1][j - 1].fScore === INF 
+                        || this.nodes[i - 1][j - 1].fScore > fNew) {
+                        // console.log([fNew, [i - 1, j - 1]])
+                        openList.add([fNew, [i - 1, j - 1]]);
+                        
+                        this.nodes[i - 1][j - 1].fScore = fNew;
+                        this.nodes[i - 1][j - 1].gScore = gNew;
+                        this.nodes[i - 1][j - 1].hScore = hNew;
+                        this.nodes[i - 1][j - 1].parent.x = i;
+                        this.nodes[i - 1][j - 1].parent.y = j;
+                        console.log(this.nodes[i - 1][j - 1].parent);
+                    }
+                }
+            }
+            
+            // x + 1, y - 1 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            if(this.isValid({x: i + 1, y: j - 1})) {
+            console.log(`x + 1 y - 1`)
+                if(this.isDestination({x: i + 1, y: j - 1})) {
+                    this.nodes[i + 1][j - 1].parent.x = i;
+                    this.nodes[i + 1][j - 1].parent.y = j;
+                    console.log(this.nodes[i + 1][j - 1].parent);
+                    console.log("Found  destination");
+                    this.tracePath();
+                    foundDest = true;
+                    return;
+                }
+                else if(!closeList[i + 1][j - 1] && !this.nodes[i + 1][j - 1].isObstacle) {
+                    gNew = this.nodes[i][j].gScore + 1.0;
+                    hNew = this.calculateHScore({x: i + 1, y: j - 1});
+                    fNew = gNew + hNew;
+                    
+                    if(this.nodes[i + 1][j - 1].fScore === INF 
+                        || this.nodes[i + 1][j - 1].fScore > fNew) {
+                        openList.add([fNew, [i + 1, j - 1]]);
+                        
+                        this.nodes[i + 1][j - 1].fScore = fNew;
+                        this.nodes[i + 1][j - 1].gScore = gNew;
+                        this.nodes[i + 1][j - 1].hScore = hNew;
+                        this.nodes[i + 1][j - 1].parent.x = i;
+                        this.nodes[i + 1][j - 1].parent.y = j;
+                        console.log(this.nodes[i + 1][j - 1].parent);
+                    }
+                }
+            }
+            
+        }
+        if(!foundDest) {
+            console.log("Can't reach destination");
+        } 
+        return;
+    }
+    
+    calculateHScore({x, y}) {
+        return Math.sqrt(Math.pow(x - this.end.x, 2) + Math.pow(y - this.end.y, 2));
+    }
+    
+    tracePath() {
+        let path = [];
+        let x = this.end.x;
+        let y = this.end.y;
+        
+        while(!(this.nodes[x][y].parent.x === x && this.nodes[x][y].parent.y === y)) {
+            path.push(this.nodes[x][y]);
+            let temp_x = this.nodes[x][y].parent.x;
+            let temp_y = this.nodes[x][y].parent.y;
+            x = temp_x;
+            y = temp_y;
+        }
+        path.push(this.nodes[x][y]);
+        while(path.length !== 0) {
+            let currentNode = path.pop();
+            this.drawNode({
+                x: currentNode.x,
+                y: currentNode.y,
+                color: '#0335fc',
+            });
+        }
+        return;
+    }
+    
+    isValid({x, y}) {
+        return (x >= 0 && y >= 0 && x < this.board_width && y < this.board_height);
+    }
+    
+    isDestination({x, y}) {
+        return (x === this.end.x && y === this.end.y);
     }
     
     updateNode() {
         for(let i = 0; i < this.nodes.length; i++) {
             for(let j = 0; j < this.nodes[i].length; j++) {
                 this.nodes[i][j].displayNode();
-                //this.nodes[i][j].isObstacle = true;
             }
         }  
         this.nodes[this.start.x][this.start.y].isStart = true;
@@ -153,6 +480,7 @@ class Board {
             y: this.end.y, 
             color: '#bd4a33'
         });
+        if(currentState === states[1]) {this.tracePath();};
         this.drawPreviewNode();
     }
 }

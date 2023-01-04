@@ -5,7 +5,10 @@ class Node {
         this.isObstacle = isObstacle;
         this.isStart = false;
         this.isEnd = false;
-        this.parentNode = {x, y};
+        this.parent = {x : -1, y: -1};
+        this.fScore = INF;
+        this.gScore = INF;
+        this.hScore = INF;
     }
     
     displayNode() {

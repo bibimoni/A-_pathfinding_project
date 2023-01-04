@@ -7,6 +7,7 @@ let changeStartPosBtn = document.getElementById('changeStartPos');
 let changeEndPosBtn = document.getElementById('changeEndPos');
 let addObstaclesBtn = document.getElementById('addObstacles');
 let randomObstaclesBtn = document.getElementById('randomObstacles');
+let runAlgorithmBtn = document.getElementById('runAlgorithm');
 
 let states = [
     'edit', 'view', 'onChangingStartPos', 'onChangingEndPos', 'onAddingObstacles'
@@ -33,7 +34,8 @@ changeStartPosBtn.addEventListener('click', updateStartPosition);
 changeEndPosBtn.addEventListener('click', updateEndPosition);
 addObstaclesBtn.addEventListener('click', updateObstacles);
 randomObstaclesBtn.addEventListener('click', () => {board.randomizeObstacles();});
-
+runAlgorithmBtn.addEventListener('click', runAlgorithm);
+    
 function update() {
     window.requestAnimationFrame(update);
     updateValue();
@@ -75,8 +77,16 @@ function init() {
     board.drawGrid();
 }
 
+function runAlgorithm() {
+    if(currentState !== states[0]) return;
+    board.a_star();
+    currentState = states[1];
+    stateBtn.innerHTML = 'View';
+}
+
 function updateState() {
-    if(currentState !== states[0] || currentState !== states[1]) return;
+    console.log(currentState);
+    if(currentState !== states[0] && currentState !== states[1]) return;
     if(currentState === states[0]) {
         currentState = states[1];
         stateBtn.innerHTML = 'View';
