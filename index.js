@@ -13,6 +13,9 @@ let previewVisitedBtn = document.getElementById('previewVisited');
 let delayBtn = document.getElementById('delay');
 let currentDelayBtn = document.getElementById('currentDelay');
 let changeDelayBtn = document.getElementById('changeDelay');
+let percentBtn = document.getElementById('percent');
+let currentPercentBtn = document.getElementById('currentPercent');
+let changePercentBtn = document.getElementById('changePercent');
 let resultBtn = document.getElementById('result');
 let stopBtn = document.getElementById('stop');
 
@@ -45,6 +48,7 @@ runAlgorithmBtn.addEventListener('click', runAlgorithm);
 allowDiagonalBtn.addEventListener('click', () => {board.allowDiagonal = !board.allowDiagonal;});   
 previewVisitedBtn.addEventListener('click', () => {board.previewVisited = !board.previewVisited;});
 changeDelayBtn.addEventListener('click', () => {changeCurrentDelay(currentDelayBtn.value)})
+changePercentBtn.addEventListener('click', () => {changeCurrentPercent(currentPercentBtn.value)})
 stopBtn.addEventListener('click', () => {board.resetNode()});
 
 function update() {
@@ -54,6 +58,7 @@ function update() {
     updatePosStatus();
     displayFeatures();
     updateCurrentDelay();
+    updateCurrentPercent();
     resultDisplay();
     board.update();
 }
@@ -124,10 +129,22 @@ function updateCurrentDelay() {
     delayBtn.innerHTML = board.delay;
 }
 
+function updateCurrentPercent() {
+    percentBtn.innerHTML = board.obstacleRatio * 100;
+}
+
+
 function changeCurrentDelay(val) {
     let isNum = /^\d+$/.test(val) //check if the given value is number
     if(isNum && val.length <= 8) {
         board.delay = val;
+    }
+}
+
+function changeCurrentPercent(val) {
+    let isNum = /^\d+$/.test(val) //check if the given value is number
+    if(isNum && val.length <= 100 && val.length >= 0) {
+        board.obstacleRatio = val / 100;
     }
 }
 
