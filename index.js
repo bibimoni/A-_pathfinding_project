@@ -97,7 +97,7 @@ function resultDisplay() {
             if(!board.foundPaths) {
                 resultBtn.innerHTML = "There is no such path";
             }
-            if(!board.foundPaths) {
+            if(!board.foundPath) {
                 resultBtn.innerHTML = "Search successfully";
             }
         }
