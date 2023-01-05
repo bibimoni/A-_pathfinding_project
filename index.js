@@ -45,7 +45,6 @@ changeEndPosBtn.addEventListener('click', updateEndPosition);
 addObstaclesBtn.addEventListener('click', updateObstacles);
 randomObstaclesBtn.addEventListener('click', () => {board.randomizeObstacles();});
 runAlgorithmBtn.addEventListener('click', runAlgorithm);
-allowDiagonalBtn.addEventListener('click', () => {board.allowDiagonal = !board.allowDiagonal;});   
 previewVisitedBtn.addEventListener('click', () => {board.previewVisited = !board.previewVisited;});
 changeDelayBtn.addEventListener('click', () => {changeCurrentDelay(currentDelayBtn.value)})
 changePercentBtn.addEventListener('click', () => {changeCurrentPercent(currentPercentBtn.value)})
@@ -60,6 +59,7 @@ function update() {
     updateCurrentDelay();
     updateCurrentPercent();
     resultDisplay();
+    updateAllowDiagonal();
     board.update();
 }
 
@@ -116,6 +116,10 @@ function resultDisplay() {
         document.querySelector('fieldset').style.display = 'none';
         stopBtn.style.display = 'none';
     }
+}
+
+function updateAllowDiagonal() {
+    board.allowDiagonal = allowDiagonalBtn.checked;
 }
 
 function runAlgorithm() {
