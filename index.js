@@ -95,11 +95,12 @@ function resultDisplay() {
         document.querySelector('fieldset').style.display = 'flex';
         if(board.drawFinishedPath) {
             if(!board.foundPath) {
-                resultBtn.innerHTML = "There is no such path";
+                resultBtn.innerHTML = "There is no such path";                
             }
             if(board.foundPath) {
                 resultBtn.innerHTML = "Search successfully";
             }
+            stopBtn.style.display = 'none';
         }
         if(!board.drawFinishedPath) {
             resultBtn.innerHTML = "Visualizing Search...";
