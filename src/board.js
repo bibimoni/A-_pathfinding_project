@@ -370,15 +370,17 @@ class Board {
 
         while (!(this.nodes[x][y].parent.x === x && this.nodes[x][y].parent.y === y)) {
             path.push(this.nodes[x][y]);
-            if(x !== this.end.x && y !== this.end.y && this.nodes[x][y].fScore <= this.fMax) {
+            if(!(x === this.end.x && y === this.end.y) && this.nodes[x][y].fScore <= this.fMax) {
                 this.fMaxOfResult = Math.max(this.nodes[x][y].fScore, this.fMaxOfResult);
-                //console.log(this.fMaxOfResult);
-            }
+            } 
             let temp_x = this.nodes[x][y].parent.x;
             let temp_y = this.nodes[x][y].parent.y;
             x = temp_x;
             y = temp_y;
-            if (x === -1 && y === -1) break;
+            //console.log(this.nodes[x][y].fScore,  this.fMax);
+            if (x === -1 && y === -1) {
+                break;
+            }
         }
         if (!(x === -1 && y === -1)) path.push(this.nodes[x][y]);
 
@@ -410,7 +412,7 @@ class Board {
     }
 
     drawVisitedNode() {
-        if(!this.fMaxOfResult) {
+        if(this.fMaxOfResult === undefined) {
             return;
         }
         let range = this.fMax - this.fMin;
@@ -422,11 +424,10 @@ class Board {
         let b = range * (baseRatio + remainingRatio * 1/3 + 1/20) + this.fMin;
         let c = range * (baseRatio + remainingRatio * 2/3 + 1/20) + this.fMin;
         //console.log(this.fMin, a, b, c, this.fMax);
-        //console.log(a, b);
         for (const node of this.nodesToBeDrawn) {
             let colorOfNode;
             let x = node.x, y = node.y;
-            
+            //console.log(this.nodes[x][y].fScore);
             if(this.nodes[x][y].fScore <= a) {
                 colorOfNode = '#9bf707'; //green
             }
@@ -442,7 +443,8 @@ class Board {
             this.drawNode({
                 x: node.x,
                 y: node.y,
-                color: colorOfNode
+                color: colorOfNode,
+                animation: true
             })
         }
     }
@@ -556,7 +558,7 @@ class Board {
     }
 
     //draw node with the given coords
-    drawNode({ x, y, color }) {
+    drawNode({ x, y, color, animation = false }) {
         const nodeWidth = this.grid_width / this.board_width - this.gridLineWidth;
         const nodeHeight = this.grid_height / this.board_height - this.gridLineWidth;
         const startX = x * this.grid_width / this.board_width + this.gridLineWidth;
