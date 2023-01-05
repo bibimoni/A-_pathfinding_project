@@ -99,9 +99,17 @@ function changePosition(e) {
     let currentBoardPosition = board.getMouseBoardPosition(currentMousePosition);
     
     //remove the old starting pos
-    let oldPos = (currentState === states[2]) ? board.start : board.end;
+    //let oldPos = (currentState === states[2]) ? board.start : board.end;
     //redraw the old position
-    board.drawNode({x: oldPos.x, y: oldPos.y, color: 'black'});
+    if(currentState === states[2]) {
+        board.drawNode({x: board.start.x, y: board.start.y, color: 'black'});
+        board.nodes[board.start.x][board.start.y].isStart = false;
+    }
+    if(currentState === states[3]) {
+        board.drawNode({x: board.end.x, y: board.end.y, color: 'black'});
+        board.nodes[board.end.x][board.end.y].isEnd = false;
+    }
+    //board.drawNode({x: oldPos.x, y: oldPos.y, color: 'black'});
     //change the current pos
     if(currentState === states[2]) {
         board.start = currentBoardPosition;
