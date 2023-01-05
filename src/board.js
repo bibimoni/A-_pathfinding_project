@@ -2,7 +2,7 @@ class Board {
     constructor(
         width,
         startingPos = { x: 0, y: 0 },
-        endingPos = { x: 1, y: 0 },
+        endingPos = { x: 3, y: 0 },
         obstacleRatio = 0.3
     ) {
         this.start = { x: startingPos.x, y: startingPos.y };
@@ -383,7 +383,13 @@ class Board {
         if (!(x === -1 && y === -1)) path.push(this.nodes[x][y]);
 
         if (this.drawFinishedPath) {
-            let lineColor = '#003775'; //blue
+            let lineColor
+            if(this.previewVisited) {
+                lineColor = 'black';
+            }
+            else {
+                lineColor = 'white';
+            } 
             while (path.length !== 0) {
                 let currentNode1 = path.pop();
                 if(path.length === 0) break;
@@ -442,6 +448,9 @@ class Board {
     }
 
     addVisitedNodes() {
+        if(this.drawFinishedPath) {
+            return;
+        }
         let k = 0;
         let check = 0;
         for (const visitedNode of this.visitedNode) {
@@ -613,12 +622,16 @@ class Board {
         this.hasBeenPreviewed = false;
         this.executed = false;
         this.drawFinishedPath = false;
+        this.fMax = 0;
+        this.fMin = INF;
+        this.fMaxOfResult = 0; 
+        this.previewVisited = true; 
+        this.foundPath = true;
     }
 
     update() {
-        this.updateNode();
         this.drawGrid();
-        
+        this.updateNode();
         if (this.executed) {
             if(this.previewVisited) {
                 this.drawVisitedNode();
@@ -627,6 +640,7 @@ class Board {
                 this.tracePath();
             };
         };
+        
         this.drawPreviewNode();
         //draw starting node
         this.drawNode({

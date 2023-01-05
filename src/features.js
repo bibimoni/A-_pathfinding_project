@@ -89,7 +89,7 @@ function addingObstacles(e) {
     if(!currentBoardPosition) return;
     if(currentBoardPosition === board.start || currentBoardPosition === board.end) return;
     board.nodes[currentBoardPosition.x][currentBoardPosition.y].isObstacle = !board.nodes[currentBoardPosition.x][currentBoardPosition.y].isObstacle;
-    console.log(board.nodes[currentBoardPosition.x][currentBoardPosition.y].isObstacle);
+    //console.log(board.nodes[currentBoardPosition.x][currentBoardPosition.y].isObstacle);
 }
 
 ////////////////////////////////////////////////////////////////

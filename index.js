@@ -14,6 +14,7 @@ let delayBtn = document.getElementById('delay');
 let currentDelayBtn = document.getElementById('currentDelay');
 let changeDelayBtn = document.getElementById('changeDelay');
 let resultBtn = document.getElementById('result');
+let stopBtn = document.getElementById('stop');
 
 let states = [
     'edit', 'view', 'onChangingStartPos', 'onChangingEndPos', 'onAddingObstacles'
@@ -44,6 +45,7 @@ runAlgorithmBtn.addEventListener('click', runAlgorithm);
 allowDiagonalBtn.addEventListener('click', () => {board.allowDiagonal = !board.allowDiagonal;});   
 previewVisitedBtn.addEventListener('click', () => {board.previewVisited = !board.previewVisited;});
 changeDelayBtn.addEventListener('click', () => {changeCurrentDelay(currentDelayBtn.value)})
+stopBtn.addEventListener('click', () => {board.resetNode()});
 
 function update() {
     window.requestAnimationFrame(update);
@@ -90,6 +92,7 @@ function init() {
 
 function resultDisplay() {
     if(board.executed) {
+        document.querySelector('fieldset').style.display = 'flex';
         if(board.drawFinishedPath) {
             if(!board.foundPaths) {
                 resultBtn.innerHTML = "There is no such path";
@@ -100,7 +103,12 @@ function resultDisplay() {
         }
         if(!board.drawFinishedPath) {
             resultBtn.innerHTML = "Visualizing Search...";
+            stopBtn.style.display = 'flex';
         }
+    }
+    else {
+        document.querySelector('fieldset').style.display = 'none';
+        stopBtn.style.display = 'none';
     }
 }
 
