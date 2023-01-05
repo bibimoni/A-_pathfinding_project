@@ -13,6 +13,7 @@ let previewVisitedBtn = document.getElementById('previewVisited');
 let delayBtn = document.getElementById('delay');
 let currentDelayBtn = document.getElementById('currentDelay');
 let changeDelayBtn = document.getElementById('changeDelay');
+let resultBtn = document.getElementById('result');
 
 let states = [
     'edit', 'view', 'onChangingStartPos', 'onChangingEndPos', 'onAddingObstacles'
@@ -51,6 +52,7 @@ function update() {
     updatePosStatus();
     displayFeatures();
     updateCurrentDelay();
+    resultDisplay();
     board.update();
 }
 
@@ -84,6 +86,22 @@ function updateOnResizing() {
 
 function init() {
     board.drawGrid();
+}
+
+function resultDisplay() {
+    if(board.executed) {
+        if(board.drawFinishedPath) {
+            if(!board.foundPaths) {
+                resultBtn.innerHTML = "There is no such path";
+            }
+            if(!board.foundPaths) {
+                resultBtn.innerHTML = "Search successfully";
+            }
+        }
+        if(!board.drawFinishedPath) {
+            resultBtn.innerHTML = "Visualizing Search...";
+        }
+    }
 }
 
 function runAlgorithm() {

@@ -32,6 +32,7 @@ class Board {
         this.fMaxOfResult = 0; //max f score of the result path 
         //for displaying purposes
         this.previewVisited = true; // change upon click in view state
+        this.foundPath = true;
     }
 
     a_star() {
@@ -56,8 +57,15 @@ class Board {
             let current = [...openList][0];
             openList.delete(current);
             
-            i = current[1][0];
-            j = current[1][1];
+            if(current && current[1]) {
+                i = current[1][0];
+                j = current[1][1];
+            }
+            
+            else {
+                break;
+            }
+            
             
             closeList[i][j] = true;
 
@@ -346,6 +354,7 @@ class Board {
 
         if (!foundDest) {
             console.log("Can't reach destination");
+            this.foundPath = false;
         }
         return;
     }
@@ -609,7 +618,7 @@ class Board {
     update() {
         this.updateNode();
         this.drawGrid();
-
+        
         if (this.executed) {
             if(this.previewVisited) {
                 this.drawVisitedNode();

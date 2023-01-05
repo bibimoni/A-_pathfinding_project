@@ -115,6 +115,11 @@ input[type=checkbox] {
     flex-direction: column; 
 }
 
+#view {
+    display: flex;
+    flex-direction: column; 
+}
+
 .slider {
     margin-left: 1rem;
     -webkit-appearance: none;

@@ -25,6 +25,15 @@
             <hr size="1" width="90%" margin-left="1rem" cursor="default">
             <div id="features">
                 <div id="edit">
+                    <div class="item">
+                        <input type="checkbox" id="allowDiagonal" checked>
+                        <label>Allow diagonal movement</label>
+                    </div>
+                    <div class="item">
+                        <label id="delayPreview">current delay: <span id="delay"></span> ms</label>
+                        <input type="text" id="currentDelay">
+                        <input type="submit" value="Change" id="changeDelay">
+                    </div>
                     <p id="startPos" class="showPosition">Start positions: 
                         <span name="sPos"></span>
                     </p>
@@ -36,21 +45,17 @@
                     <p id="addObstacles" class="editPosition">click to add obstacles</p>        
                     <p id="randomObstacles" class="editPosition">click to randomize obstacles position</p>        
                     <p id="runAlgorithm" class="editPosition">click to run</p>       
-                    <div class="item">
-                        <input type="checkbox" id="allowDiagonal" checked>
-                        <label>Allow diagonal movement</label>
-                    </div>
-                    <div class="item">
-                        <label id="delayPreview">current delay: <span id="delay"></span> ms</label>
-                        <input type="text" id="currentDelay">
-                        <input type="submit" value="Change" id="changeDelay">
-                    </div>
                 </div>
                 <div id="view">
                     <div class="item">
                         <input type="checkbox" id="previewVisited" checked>
                         <label>Preview visited nodes</label>
                     </div>
+                    <fieldset>
+                        <div>
+                            <label id="result"></label>
+                        </div>
+                    </fieldset>
                 </div>
             </div>  
             </div>   
