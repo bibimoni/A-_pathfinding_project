@@ -20,6 +20,7 @@ class Board {
         this.resetNode();
         this.gridLineWidth = .5;
         this.obstacleRatio = obstacleRatio;
+        this.delay = 5;
         //for draw nodes on screen
         this.visitedNode = []; //stores the visited nodes
         this.nodesToBeDrawn = [];
@@ -447,7 +448,7 @@ class Board {
                 if (check == this.visitedNode.length) {
                     this.drawFinishedPath = true; console.log("draw finished");
                 }
-            }, k * 5);
+            }, k * this.delay);
         }
         this.hasBeenPreviewed = true;
     }

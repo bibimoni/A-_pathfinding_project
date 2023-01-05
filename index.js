@@ -10,6 +10,9 @@ let randomObstaclesBtn = document.getElementById('randomObstacles');
 let runAlgorithmBtn = document.getElementById('runAlgorithm');
 let allowDiagonalBtn = document.getElementById('allowDiagonal');
 let previewVisitedBtn = document.getElementById('previewVisited');
+let delayBtn = document.getElementById('delay');
+let currentDelayBtn = document.getElementById('currentDelay');
+let changeDelayBtn = document.getElementById('changeDelay');
 
 let states = [
     'edit', 'view', 'onChangingStartPos', 'onChangingEndPos', 'onAddingObstacles'
@@ -39,6 +42,7 @@ randomObstaclesBtn.addEventListener('click', () => {board.randomizeObstacles();}
 runAlgorithmBtn.addEventListener('click', runAlgorithm);
 allowDiagonalBtn.addEventListener('click', () => {board.allowDiagonal = !board.allowDiagonal;});   
 previewVisitedBtn.addEventListener('click', () => {board.previewVisited = !board.previewVisited;});
+changeDelayBtn.addEventListener('click', () => {changeCurrentDelay(currentDelayBtn.value)})
 
 function update() {
     window.requestAnimationFrame(update);
@@ -46,6 +50,7 @@ function update() {
     updateDimensions(); 
     updatePosStatus();
     displayFeatures();
+    updateCurrentDelay();
     board.update();
 }
 
@@ -86,6 +91,17 @@ function runAlgorithm() {
     board.a_star();
     currentState = states[1];
     stateBtn.innerHTML = 'View';
+}
+
+function updateCurrentDelay() {
+    delayBtn.innerHTML = board.delay;
+}
+
+function changeCurrentDelay(val) {
+    let isNum = /^\d+$/.test(val) //check if the given value is number
+    if(isNum && val.length <= 8) {
+        board.delay = val;
+    }
 }
 
 function updateState() {
