@@ -3,9 +3,11 @@
 function displayFeatures() {
     if(currentState === states[0]) {
         document.getElementById('edit').style.display = 'flex';
+        document.getElementById('view').style.display = 'none';
     }
     else if(currentState === states[1]) {
         document.getElementById('edit').style.display = 'none';
+        document.getElementById('view').style.display = 'flex';
     }
 }
 

@@ -8,6 +8,8 @@ let changeEndPosBtn = document.getElementById('changeEndPos');
 let addObstaclesBtn = document.getElementById('addObstacles');
 let randomObstaclesBtn = document.getElementById('randomObstacles');
 let runAlgorithmBtn = document.getElementById('runAlgorithm');
+let allowDiagonalBtn = document.getElementById('allowDiagonal');
+let previewVisitedBtn = document.getElementById('previewVisited');
 
 let states = [
     'edit', 'view', 'onChangingStartPos', 'onChangingEndPos', 'onAddingObstacles'
@@ -35,7 +37,9 @@ changeEndPosBtn.addEventListener('click', updateEndPosition);
 addObstaclesBtn.addEventListener('click', updateObstacles);
 randomObstaclesBtn.addEventListener('click', () => {board.randomizeObstacles();});
 runAlgorithmBtn.addEventListener('click', runAlgorithm);
-    
+allowDiagonalBtn.addEventListener('click', () => {board.allowDiagonal = !board.allowDiagonal;});   
+previewVisitedBtn.addEventListener('click', () => {board.previewVisited = !board.previewVisited;});
+
 function update() {
     window.requestAnimationFrame(update);
     updateValue();
@@ -93,7 +97,8 @@ function updateState() {
     }
     else if(currentState === states[1]) {
         currentState = states[0];    
-        stateBtn.innerHTML = 'Edit';        
+        stateBtn.innerHTML = 'Edit';
+        board.resetNode();
     }
 }
 
