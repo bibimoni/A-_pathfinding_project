@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A-star path finding project</title>
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="src/priorityqueue.js"></script>
     <script type="text/javascript" src="src/utils.js"></script>
     <script type="text/javascript" src="src/node.js"></script>
     <script type="text/javascript" src="src/board.js"></script>
@@ -27,6 +28,10 @@
                     <div class="item">
                         <input type="checkbox" id="allowDiagonal" checked>
                         <label>Allow diagonal movement</label>
+                    </div>
+                    <div class="item">
+                        <input type="checkbox" id="heapOptimization">
+                        <label>Enable heap optimization</label>
                     </div>
                     <div class="item">
                         <label id="delayPreview">current delay: <span id="delay"></span> ms</label>

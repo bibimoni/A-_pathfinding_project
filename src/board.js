@@ -21,6 +21,7 @@ class Board {
         this.gridLineWidth = .5;
         this.obstacleRatio = obstacleRatio;
         this.delay = 5;
+        this.heapOptimization = false;
         //for draw nodes on screen
         this.visitedNode = []; //stores the visited nodes
         this.nodesToBeDrawn = [];
@@ -38,7 +39,13 @@ class Board {
     a_star() {
         this.executed = true;
         //open list stores f (f = g + h) and i, j
-        let openList = new Set();
+        let openList;
+        if(this.heapOptimization) {
+            openList = new PriorityQueue((a, b) => a[0] < b[0]);
+        }
+        else {
+            openList = new Set();
+        } 
         let closeList = create2DArray({ x: this.board_width, y: this.board_height, val: false });
         let foundDest = false;
 
@@ -51,12 +58,24 @@ class Board {
         this.nodes[this.start.x][this.start.y].parent.y = j;
 
         //first node has f = 0
-        openList.add([0, [i, j]]);
+        if(this.heapOptimization) { 
+            openList.push([0, [i, j]]);
+        }
+        else {
+            openList.add([0, [i, j]]);
+        }
+        console.log(openList, this.heapOptimization);
 
         while (openList.length !== 0) {
-            let current = [...openList][0];
-            openList.delete(current);
-            
+            let current;
+            if(this.heapOptimization) { 
+                current = openList.pop();
+            }
+            else {   
+                current = [...openList][0];
+                openList.delete(current);
+            }
+        
             if(current && current[1]) {
                 i = current[1][0];
                 j = current[1][1];
@@ -65,8 +84,7 @@ class Board {
             else {
                 break;
             }
-            
-            
+                        
             closeList[i][j] = true;
 
             let gNew, hNew, fNew;
@@ -92,7 +110,12 @@ class Board {
                     if (this.nodes[i - 1][j].fScore === INF
                         || this.nodes[i - 1][j].fScore > fNew) {
                         // console.log([fNew, [i - 1, j]]);
-                        openList.add([fNew, [i - 1, j]]);
+                        if(this.heapOptimization) { 
+                            openList.push([fNew, [i - 1, j]]);
+                        }
+                        else {
+                            openList.add([fNew, [i - 1, j]]);
+                        }
                         this.updateMaxMinFScore(fNew);
                         this.visitedNode.push({ x: i - 1, y: j });
 
@@ -126,8 +149,13 @@ class Board {
 
                     if (this.nodes[i + 1][j].fScore === INF
                         || this.nodes[i + 1][j].fScore > fNew) {
-                        // console.log([fNew, [i + 1, j]])
-                        openList.add([fNew, [i + 1, j]]);
+                        // console.log([fNew, [i + 1, j]])                        
+                        if(this.heapOptimization) { 
+                            openList.push([fNew, [i + 1, j]]);                        
+                        }
+                        else {
+                            openList.add([fNew, [i + 1, j]]);
+                        }
                         this.updateMaxMinFScore(fNew);
                         this.visitedNode.push({ x: i + 1, y: j });
 
@@ -162,7 +190,12 @@ class Board {
                     if (this.nodes[i][j - 1].fScore === INF
                         || this.nodes[i][j - 1].fScore > fNew) {
                         // console.log([fNew, [i, j - 1]])
-                        openList.add([fNew, [i, j - 1]]);
+                        if(this.heapOptimization) { 
+                            openList.push([fNew, [i, j - 1]]);
+                        }
+                        else {
+                            openList.add([fNew, [i, j - 1]]);
+                        }
                         this.visitedNode.push({ x: i, y: j - 1 });
                         this.updateMaxMinFScore(fNew);
                         
@@ -197,7 +230,12 @@ class Board {
                     if (this.nodes[i][j + 1].fScore === INF
                         || this.nodes[i][j + 1].fScore > fNew) {
                         // console.log([fNew, [i, j + 1]])
-                        openList.add([fNew, [i, j + 1]]);
+                        if(this.heapOptimization) {                             
+                            openList.push([fNew, [i, j + 1]]);
+                        }
+                        else {                            
+                            openList.add([fNew, [i, j + 1]]);
+                        }
                         this.visitedNode.push({ x: i, y: j + 1 });
                         this.updateMaxMinFScore(fNew);
 
@@ -232,7 +270,12 @@ class Board {
                         if (this.nodes[i + 1][j + 1].fScore === INF
                             || this.nodes[i + 1][j + 1].fScore > fNew) {
                             // console.log([fNew, [i + 1, j + 1]])
-                            openList.add([fNew, [i + 1, j + 1]]);
+                            if(this.heapOptimization) { 
+                                openList.push([fNew, [i + 1, j + 1]]);
+                            }
+                            else {   
+                                openList.add([fNew, [i + 1, j + 1]]);
+                            }
                             this.visitedNode.push({ x: i + 1, y: j + 1 });
                             this.updateMaxMinFScore(fNew);
 
@@ -267,7 +310,12 @@ class Board {
                         if (this.nodes[i - 1][j + 1].fScore === INF
                             || this.nodes[i - 1][j + 1].fScore > fNew) {
                             // console.log([fNew, [i - 1, j + 1]]);
-                            openList.add([fNew, [i - 1, j + 1]]);
+                            if(this.heapOptimization) { 
+                                openList.push([fNew, [i - 1, j + 1]]);
+                            }
+                            else {   
+                                openList.add([fNew, [i - 1, j + 1]]);
+                            }
                             this.visitedNode.push({ x: i - 1, y: j + 1 });
                             this.updateMaxMinFScore(fNew);
 
@@ -302,7 +350,12 @@ class Board {
                         if (this.nodes[i - 1][j - 1].fScore === INF
                             || this.nodes[i - 1][j - 1].fScore > fNew) {
                             // console.log([fNew, [i - 1, j - 1]])
-                            openList.add([fNew, [i - 1, j - 1]]);
+                            if(this.heapOptimization) { 
+                                openList.push([fNew, [i - 1, j - 1]]);
+                            }
+                            else {   
+                                openList.add([fNew, [i - 1, j - 1]]);
+                            }
                             this.visitedNode.push({ x: i - 1, y: j - 1 });
                             this.updateMaxMinFScore(fNew);
 
@@ -336,7 +389,12 @@ class Board {
 
                         if (this.nodes[i + 1][j - 1].fScore === INF
                             || this.nodes[i + 1][j - 1].fScore > fNew) {
-                            openList.add([fNew, [i + 1, j - 1]]);
+                            if(this.heapOptimization) { 
+                                openList.push([fNew, [i + 1, j - 1]]);
+                            }
+                            else {   
+                                openList.add([fNew, [i + 1, j - 1]]);
+                            }
                             this.visitedNode.push({ x: i + 1, y: j - 1 });
                             this.updateMaxMinFScore(fNew);
 

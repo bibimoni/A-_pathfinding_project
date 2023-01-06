@@ -9,6 +9,7 @@ let addObstaclesBtn = document.getElementById('addObstacles');
 let randomObstaclesBtn = document.getElementById('randomObstacles');
 let runAlgorithmBtn = document.getElementById('runAlgorithm');
 let allowDiagonalBtn = document.getElementById('allowDiagonal');
+let heapOptimizationBtn = document.getElementById('heapOptimization');
 let previewVisitedBtn = document.getElementById('previewVisited');
 let delayBtn = document.getElementById('delay');
 let currentDelayBtn = document.getElementById('currentDelay');
@@ -60,6 +61,7 @@ function update() {
     updateCurrentPercent();
     resultDisplay();
     updateAllowDiagonal();
+    updateHeapOptimization();
     board.update();
 }
 
@@ -120,6 +122,10 @@ function resultDisplay() {
 
 function updateAllowDiagonal() {
     board.allowDiagonal = allowDiagonalBtn.checked;
+}
+
+function updateHeapOptimization() {
+    board.heapOptimization = heapOptimizationBtn.checked;
 }
 
 function runAlgorithm() {
