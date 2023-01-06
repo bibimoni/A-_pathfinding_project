@@ -129,7 +129,9 @@ function updateHeapOptimization() {
 }
 
 function runAlgorithm() {
-    if(currentState !== states[0]) return;
+    if(currentState !== states[0]) {
+        return;
+    }
     board.a_star();
     currentState = states[1];
     stateBtn.innerHTML = 'View';
@@ -159,7 +161,7 @@ function changeCurrentPercent(val) {
 }
 
 function updateState() {
-    console.log(currentState);
+    //console.log(currentState);
     if(currentState !== states[0] && currentState !== states[1]) return;
     if(currentState === states[0]) {
         currentState = states[1];
@@ -168,7 +170,8 @@ function updateState() {
     else if(currentState === states[1]) {
         currentState = states[0];    
         stateBtn.innerHTML = 'Edit';
-        board.resetNode();
+        console.log('called');
+        board.resetNode(false);
     }
 }
 

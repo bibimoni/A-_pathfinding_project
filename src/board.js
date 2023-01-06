@@ -668,15 +668,28 @@ class Board {
         ctx.closePath();
     }
 
-    resetNode() {
+    resetNode(resetObstacle = true) {
+        let newNodes = [];
         for (let i = 0; i < this.board_width; i++) {
-            this.nodes[i] = [];
+            newNodes[i] = [];
             for (let j = 0; j < this.board_height; j++) {
-                this.nodes[i][j] = new Node({ x: i, y: j });
-                if (i == this.start.x && j == this.start.y) this.nodes[i][j].isStart = true;
-                else if (i == this.end.x && j == this.end.y) this.nodes[i][j].isEnd = true;
+                if(!resetObstacle) {
+                    if(this.nodes[i][j].isObstacle) {
+                        newNodes[i][j] = new Node({ x: i, y: j });
+                        newNodes[i][j].isObstacle = true;
+                    }
+                    else {
+                        newNodes[i][j] = new Node({ x: i, y: j });
+                    }
+                }
+                else {
+                    newNodes[i][j] = new Node({ x: i, y: j });
+                }
+                if (i == this.start.x && j == this.start.y) newNodes[i][j].isStart = true;
+                else if (i == this.end.x && j == this.end.y) newNodes[i][j].isEnd = true;
             }
         }
+        this.nodes = newNodes;
         this.visitedNode = [];
         this.nodesToBeDrawn = [];
         this.hasBeenPreviewed = false;
